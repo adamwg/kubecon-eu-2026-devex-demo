@@ -10,6 +10,10 @@ from .model.io.k8s.apimachinery.pkg.util import intstr
 def compose(req: fnv1.RunFunctionRequest, rsp: fnv1.RunFunctionResponse):
     xr = v1alpha1.WebApp(**resource.struct_to_dict(req.observed.composite.resource))
 
+    assert xr.metadata is not None
+    assert xr.metadata.name is not None
+    assert xr.spec.ports is not None
+
     labels = {"app.kubernetes.io/name": xr.metadata.name}
     ports = xr.spec.ports
 

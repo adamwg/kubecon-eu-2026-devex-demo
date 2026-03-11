@@ -42,8 +42,8 @@ Crossplane maintainer talk at KubeCon EU 2026.
     kind: WebApp
     spec:
       image: string | required=true description="OCI image for the webapp"
-      replicas: integer | default=1 minimum=1 maximum=100
-      ports: "[]integer | default=[80]"
+      replicas: integer | default=1 minimum=1 maximum=100 description="Number of replicas to run"
+      ports: "[]integer | default=[80] description=\"Ports to expose from the application container\""
     EOF
     ```
 
