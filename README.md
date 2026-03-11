@@ -61,17 +61,18 @@ Crossplane maintainer talk at KubeCon EU 2026.
     cat apis/webapps/composition.yaml
     ```
 
-7. Generate a composition function that we'll use to compose resources:
-
-    ```shell
-    crank beta function generate --language=python compose-webapp apis/webapps/composition.yaml
-    ```
-
-8. Add the core Kubernetes types as an API dependency, since we're going to
+7. Add the core Kubernetes types as an API dependency, since we're going to
    compose k8s resources:
 
     ```shell
     crank beta dependency add --api k8s:v1.35.0
+    cat crossplane-project.yaml
+    ```
+
+8. Generate a composition function that we'll use to compose resources:
+
+    ```shell
+    crank beta function generate --language=python compose-webapp apis/webapps/composition.yaml
     ```
 
 9. Fill in the function (by copying and pasting from `function.py`). Show that
