@@ -78,13 +78,13 @@ Crossplane maintainer talk at KubeCon EU 2026.
     ```
 
 9. Write a function:
-   a. Open the project in VSCode (`code .`).
-   b. Create a Python venv using the `Create Environment` command in
+   1. Open the project in VSCode (`code .`).
+   2. Create a Python venv using the `Create Environment` command in
       VSCode. Accept the defaults and make sure to install packages from the
       function's requirements.txt.
-   c. Fill in the function by copying and pasting from `function.py` into
+   3. Fill in the function by copying and pasting from `function.py` into
       `main.py`.
-   d. Show the nice IDE features we get, like mouse-over docs and
+   4. Show the nice IDE features we get, like mouse-over docs and
       auto-completion.
 
 10. Run the project and show what gets installed:
