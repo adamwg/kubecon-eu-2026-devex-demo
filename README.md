@@ -50,7 +50,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
 5. Generate an XRD from the example:
 
     ```shell
-    crank beta xrd generate --from=simpleschema examples/webapp/schema.yaml
+    crank beta xrd generate --from=simpleschema apis/webapps/schema.yaml
     cat apis/webapp/definition.yaml
     ```
 
