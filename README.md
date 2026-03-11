@@ -73,10 +73,19 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     crank beta function generate --language=python compose-webapp apis/webapps/composition.yaml
+    cat apis/webapps/composition.yaml
+    ls functions/compose-webapp
     ```
 
-9. Fill in the function (by copying and pasting from `function.py`). Show that
-   we get nice IDE features like mouse-over docs and completion.
+9. Write a function:
+   a. Open the project in VSCode (`code .`).
+   b. Create a Python venv using the `Create Environment` command in
+      VSCode. Accept the defaults and make sure to install packages from the
+      function's requirements.txt.
+   c. Fill in the function by copying and pasting from `function.py` into
+      `main.py`.
+   d. Show the nice IDE features we get, like mouse-over docs and
+      auto-completion.
 
 10. Run the project and show what gets installed:
 
