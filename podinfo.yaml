@@ -1,0 +1,9 @@
+apiVersion: platform.example.com/v1alpha1
+kind: WebApp
+metadata:
+  name: podinfo
+  namespace: default
+spec:
+  image: docker.io/stefanprodan/podinfo:6.11.0
+  replicas: 3
+  ports: [9898]
