@@ -51,14 +51,14 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     crank beta xrd generate --from=simpleschema apis/webapps/schema.yaml
-    cat apis/webapp/definition.yaml
+    cat apis/webapps/definition.yaml
     ```
 
 6. Generate a composition to compose resources based on the XRD:
 
     ```shell
     crank beta composition generate apis/webapps/xrd.yaml
-    cat apis/webapp/composition.yaml
+    cat apis/webapps/composition.yaml
     ```
 
 7. Generate a composition function that we'll use to compose resources:
