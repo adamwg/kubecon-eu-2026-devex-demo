@@ -57,7 +57,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
 6. Generate a composition to compose resources based on the XRD:
 
     ```shell
-    crank beta composition generate apis/webapps/xrd.yaml
+    crank beta composition generate apis/webapps/definition.yaml
     cat apis/webapps/composition.yaml
     ```
 
