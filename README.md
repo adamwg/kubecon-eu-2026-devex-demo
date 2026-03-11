@@ -87,10 +87,14 @@ Crossplane maintainer talk at KubeCon EU 2026.
    4. Show the nice IDE features we get, like mouse-over docs and
       auto-completion.
 
-10. Run the project and show what gets installed:
+10. Run the project and show what gets created:
 
     ```shell
     crank beta project run
+    kind get clusters
+    docker ps
+    kubectl get pkg
+    kubectl api-resources|grep example
     ```
 
 11. Create an example XR:
@@ -115,6 +119,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
     ```shell
     kubectl apply -f examples/webapp/podinfo.yaml
     kubectl get webapp
+    kubectl wait --for=condition=ready=true webapp podinfo
     kubectl get deployment
     kubectl get service
     ```
@@ -124,4 +129,12 @@ Crossplane maintainer talk at KubeCon EU 2026.
     ```shell
     kubectl port-forward svc/podinfo-... 9898 &
     open http://localhost:9898
+    ```
+
+14. Stop the local control plane and show the cleanup:
+
+    ```shell
+    crank beta project stop
+    kind get clusters
+    docker ps
     ```
