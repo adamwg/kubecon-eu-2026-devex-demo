@@ -5,10 +5,11 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
 ## Setup
 
-1. Clone my Crossplane fork, which includes WIP DevEx features in the CLI:
+1. Clone my Crossplane fork, which includes WIP DevEx features in the CLI, into
+   an empty directory:
 
     ```shell
-     git clone -b awg/devex-poc https://github.com/adamwg/crossplane.git
+    git clone -b awg/devex-poc https://github.com/adamwg/crossplane.git
     ```
 
 2. Install the Crossplane CLI (`crank`):
@@ -51,6 +52,9 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     crank beta xrd generate --from=simpleschema apis/webapps/schema.yaml
+    echo
+    echo "Here's what that command generated in apis/webapps/definition.yaml:"
+    echo
     cat apis/webapps/definition.yaml
     ```
 
@@ -58,6 +62,9 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     crank beta composition generate apis/webapps/definition.yaml
+    echo
+    echo "Here's what that command generated in apis/webapps/composition.yaml:"
+    echo
     cat apis/webapps/composition.yaml
     ```
 
@@ -66,6 +73,9 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     crank beta dependency add --api k8s:v1.35.0
+    echo
+    echo "Here's what crossplane-project.yaml looks like after adding the dependency:"
+    echo
     cat crossplane-project.yaml
     ```
 
@@ -73,8 +83,14 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     crank beta function generate --language=python compose-webapp apis/webapps/composition.yaml
+    echo
+    echo "Here's what the composition looks like now:"
+    echo
     cat apis/webapps/composition.yaml
-    ls functions/compose-webapp
+    echo
+    echo "And here's the new function, in functions/compose-webapp:"
+    echo
+    ls -l functions/compose-webapp
     ```
 
 9. Write a function:
@@ -91,9 +107,21 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     crank beta project run
+    echo
+    echo "That created a kind cluster for us:"
+    echo
     kind get clusters
+    echo
+    echo "And also started a local registry in a container:"
+    echo
     docker ps
+    echo
+    echo "Our configuration, and its embedded functions, are installed in the cluster:"
+    echo
     kubectl get pkg
+    echo
+    echo "And the XRD we defined is available via the API server:"
+    echo
     kubectl api-resources|grep example
     ```
 
@@ -118,8 +146,14 @@ Crossplane maintainer talk at KubeCon EU 2026.
 
     ```shell
     kubectl apply -f examples/webapp/podinfo.yaml
+    echo
+    echo "Here's our webapp resource; let's wait for it to be ready:"
+    echo
     kubectl get webapp
     kubectl wait --for=condition=ready=true webapp podinfo
+    echo
+    echo "We can see the deployment and service that were composed:"
+    echo
     kubectl get deployment
     kubectl get service
     ```
@@ -127,13 +161,16 @@ Crossplane maintainer talk at KubeCon EU 2026.
 13. Show the running composed application:
 
     ```shell
-    kubectl port-forward svc/podinfo-... 9898 &
+    kubectl port-forward svc/$(kubectl get svc -l crossplane.io/composite=podinfo -o jsonpath='{.items[0].metadata.name}') 9898 >/dev/null 2>&1 &
     open http://localhost:9898
     ```
 
 14. Stop the local control plane and show the cleanup:
 
     ```shell
+    # Shut down the port-forward from the previous step.
+    kill %1
+    # Stop the local dev environment.
     crank beta project stop
     kind get clusters
     docker ps
