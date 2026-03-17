@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    crossplane.io/composition-resource-name: deployment
+  generateName: podinfo-
+  labels:
+    app.kubernetes.io/name: podinfo
+    crossplane.io/composite: podinfo
+  namespace: default
+  ownerReferences:
+  - apiVersion: platform.example.com/v1alpha1
+    blockOwnerDeletion: true
+    controller: true
+    kind: WebApp
+    name: podinfo
+    uid: ""
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: podinfo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: podinfo
+    spec:
+      containers:
+      - image: docker.io/stefanprodan/podinfo:6.11.0
+        name: app
+        ports:
+        - containerPort: 9898

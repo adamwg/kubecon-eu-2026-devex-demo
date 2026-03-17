@@ -18,6 +18,19 @@ Crossplane maintainer talk at KubeCon EU 2026.
     cd crossplane && go install ./cmd/crank
     ```
 
+3. Clone my xprin fork, which includes minor changes to make xprin work in the
+   context of a project:
+
+   ```shell
+   cd .. && git clone -b awg/devex-poc https://github.com/adamwg/xprin.git
+   ```
+
+4. Install xprin:
+
+   ```shell
+   cd xprin && go install ./cmd/xprin
+   ```
+
 ## Demo Script
 
 1. Show the help for the new features:
@@ -103,7 +116,30 @@ Crossplane maintainer talk at KubeCon EU 2026.
    4. Show the nice IDE features we get, like mouse-over docs and
       auto-completion.
 
-10. Run the project and show what gets created:
+10. Create an example XR:
+
+    ```shell
+    mkdir examples/webapp
+    cat <<EOF >examples/webapp/podinfo.yaml
+    apiVersion: platform.example.com/v1alpha1
+    kind: WebApp
+    metadata:
+      name: podinfo
+      namespace: default
+    spec:
+      image: docker.io/stefanprodan/podinfo:6.11.0
+      replicas: 3
+      ports: [9898]
+    EOF
+    ```
+
+11. Use render to show what the composition will produce:
+
+    ```shell
+    crank render --timeout=10m examples/webapp/podinfo.yaml apis/webapps/composition.yaml
+    ```
+
+12. Run the project and show what gets created:
 
     ```shell
     crank beta project run
@@ -125,24 +161,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
     kubectl api-resources|grep example
     ```
 
-11. Create an example XR:
-
-    ```shell
-    mkdir examples/webapp
-    cat <<EOF >examples/webapp/podinfo.yaml
-    apiVersion: platform.example.com/v1alpha1
-    kind: WebApp
-    metadata:
-      name: podinfo
-      namespace: default
-    spec:
-      image: docker.io/stefanprodan/podinfo:6.11.0
-      replicas: 3
-      ports: [9898]
-    EOF
-    ```
-
-12. Apply the example and see the composition work:
+13. Apply the example and see the composition work:
 
     ```shell
     kubectl apply -f examples/webapp/podinfo.yaml
@@ -158,14 +177,25 @@ Crossplane maintainer talk at KubeCon EU 2026.
     kubectl get service
     ```
 
-13. Show the running composed application:
+14. Show the running composed application:
 
     ```shell
     kubectl port-forward svc/$(kubectl get svc -l crossplane.io/composite=podinfo -o jsonpath='{.items[0].metadata.name}') 9898 >/dev/null 2>&1 &
     open http://localhost:9898
     ```
 
-14. Stop the local control plane and show the cleanup:
+15. Create an xprin test for our composition (this isn't fully integrated into
+    the tooling yet):
+    1. Create a directory for the test: `mkdir tests/test-webapp`.
+    2. Populate the directory by copying in the files from this repository's
+       `test` directory.
+    3. Run the test:
+
+       ```shell
+       xprin test tests/test-webapp
+       ```
+
+16. Stop the local control plane and show the cleanup:
 
     ```shell
     # Shut down the port-forward from the previous step.

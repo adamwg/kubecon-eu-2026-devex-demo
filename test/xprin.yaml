@@ -1,0 +1,18 @@
+common:
+  patches:
+    xrd: ../../apis/webapps/definition.yaml
+  inputs:
+    composition: ../../apis/webapps/composition.yaml
+    xr: ../../examples/webapp/podinfo.yaml
+
+tests:
+  - name: "Validate that resources are composed correctly"
+    id: compose
+    assertions:
+      dyff:
+        - name: "Deployment"
+          expected: expected/deployment.yaml
+          resource: Deployment/
+        - name: "Service"
+          expected: expected/service.yaml
+          resource: Service/
