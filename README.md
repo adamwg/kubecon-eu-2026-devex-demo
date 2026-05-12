@@ -127,10 +127,12 @@ CLI. See git history for the historical demo.
     EOF
     ```
 
-11. Use render to show what the composition will produce:
+11. Use render to show what the composition will produce. Note we currently need
+    the `--crossplane-version` argument because the latest stable Crossplane
+    doesn't support `crossplane internal render`.
 
     ```shell
-    crossplane composition render --timeout=10m examples/webapp/podinfo.yaml apis/webapps/composition.yaml
+    crossplane composition render --timeout=10m --crossplane-version v2.3.0-rc.0.174.gd67e89cda examples/webapp/podinfo.yaml apis/webapps/composition.yaml
     ```
 
 12. Run the project and show what gets created:
