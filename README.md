@@ -1,48 +1,43 @@
 # KubeCon EU 2026 Crossplane DevEx Demo
 
 This is the demo script and supporting files for the DevEx demo in the
-Crossplane maintainer talk at KubeCon EU 2026.
+Crossplane maintainer talk at KubeCon EU 2026. It has been updated,
+post-KubeCon, to reflect the state of the DevEx tooling as we add it to the
+CLI. See git history for the historical demo.
 
 ## Setup
 
-1. Clone my Crossplane fork, which includes WIP DevEx features in the CLI, into
-   an empty directory:
+1. Clone [PR#10](https://github.com/crossplane/cli/pull/10) from the Crossplane
+   CLI, which includes WIP DevEx features in the CLI, into an empty directory:
 
     ```shell
-    git clone -b awg/devex-poc https://github.com/adamwg/crossplane.git
+    git clone --revision refs/pull/10/head https://github.com/crossplane/cli.git crossplane-cli
     ```
 
-2. Install the Crossplane CLI (`crank`):
+2. Install the Crossplane CLI:
 
     ```shell
-    cd crossplane && go install ./cmd/crank
+    cd crossplane-cli && go install ./cmd/crossplane
     ```
-
-3. Clone my xprin fork, which includes minor changes to make xprin work in the
-   context of a project:
-
-   ```shell
-   cd .. && git clone -b awg/devex-poc https://github.com/adamwg/xprin.git
-   ```
-
-4. Install xprin:
-
-   ```shell
-   cd xprin && go install ./cmd/xprin
-   ```
 
 ## Demo Script
 
-1. Show the help for the new features:
+1. Explore the help for the new features:
 
     ```shell
-    crank beta project --help
+    crossplane --help
+    crossplane project --help
+    crossplane composition --help
+    crossplane dependency --help
+    crossplane function --help
+    crossplane operation --help
+    crossplane xrd --help
     ```
 
 2. Initialize an empty project:
 
     ```shell
-    crank beta project init hello-amsterdam && cd hello-amsterdam
+    crossplane project init hello-amsterdam && cd hello-amsterdam
     ```
 
 3. Explore the project!
@@ -64,7 +59,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
 5. Generate an XRD from the example:
 
     ```shell
-    crank beta xrd generate --from=simpleschema apis/webapps/schema.yaml
+    crossplane xrd generate --from=simpleschema apis/webapps/schema.yaml
     echo
     echo "Here's what that command generated in apis/webapps/definition.yaml:"
     echo
@@ -74,7 +69,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
 6. Generate a composition to compose resources based on the XRD:
 
     ```shell
-    crank beta composition generate apis/webapps/definition.yaml
+    crossplane composition generate apis/webapps/definition.yaml
     echo
     echo "Here's what that command generated in apis/webapps/composition.yaml:"
     echo
@@ -85,7 +80,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
    compose k8s resources:
 
     ```shell
-    crank beta dependency add --api k8s:v1.35.0
+    crossplane dependency add --api k8s:v1.35.0
     echo
     echo "Here's what crossplane-project.yaml looks like after adding the dependency:"
     echo
@@ -95,7 +90,7 @@ Crossplane maintainer talk at KubeCon EU 2026.
 8. Generate a composition function that we'll use to compose resources:
 
     ```shell
-    crank beta function generate --language=python compose-webapp apis/webapps/composition.yaml
+    crossplane function generate --language=python compose-webapp apis/webapps/composition.yaml
     echo
     echo "Here's what the composition looks like now:"
     echo
@@ -109,11 +104,10 @@ Crossplane maintainer talk at KubeCon EU 2026.
 9. Write a function:
    1. Open the project in VSCode (`code .`).
    2. Create a Python venv using the `Create Environment` command in
-      VSCode. Accept the defaults and make sure to install packages from the
-      function's requirements.txt.
-   3. Fill in the function by copying and pasting from `function.py` into
-      `main.py`.
-   4. Show the nice IDE features we get, like mouse-over docs and
+      VSCode. Accept the defaults.
+   3. Fill in the function by copying and pasting from `fn.py` into
+      `function/fn.py`.
+   4. Look at all the nice IDE features we get, like mouse-over docs and
       auto-completion.
 
 10. Create an example XR:
@@ -136,13 +130,13 @@ Crossplane maintainer talk at KubeCon EU 2026.
 11. Use render to show what the composition will produce:
 
     ```shell
-    crank render --timeout=10m examples/webapp/podinfo.yaml apis/webapps/composition.yaml
+    crossplane composition render --timeout=10m examples/webapp/podinfo.yaml apis/webapps/composition.yaml
     ```
 
 12. Run the project and show what gets created:
 
     ```shell
-    crank beta project run
+    crossplane project run
     echo
     echo "That created a kind cluster for us:"
     echo
@@ -184,24 +178,13 @@ Crossplane maintainer talk at KubeCon EU 2026.
     open http://localhost:9898
     ```
 
-15. Create an xprin test for our composition (this isn't fully integrated into
-    the tooling yet):
-    1. Create a directory for the test: `mkdir tests/test-webapp`.
-    2. Populate the directory by copying in the files from this repository's
-       `test` directory.
-    3. Run the test:
-
-       ```shell
-       xprin test tests/test-webapp
-       ```
-
-16. Stop the local control plane and show the cleanup:
+15. Stop the local control plane and show the cleanup:
 
     ```shell
     # Shut down the port-forward from the previous step.
     kill %1
     # Stop the local dev environment.
-    crank beta project stop
+    crossplane project stop
     kind get clusters
     docker ps
     ```
