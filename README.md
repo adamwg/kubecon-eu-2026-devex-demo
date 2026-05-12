@@ -80,7 +80,7 @@ CLI. See git history for the historical demo.
    compose k8s resources:
 
     ```shell
-    crossplane dependency add --api k8s:v1.35.0
+    crossplane dependency add k8s:v1.35.0
     echo
     echo "Here's what crossplane-project.yaml looks like after adding the dependency:"
     echo
