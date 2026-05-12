@@ -102,7 +102,7 @@ CLI. See git history for the historical demo.
     ```
 
 9. Write a function:
-   1. Open the project in VSCode (`code .`).
+   1. Open the function in VSCode (`code functions/compose-webapp`).
    2. Create a Python venv using the `Create Environment` command in
       VSCode. Accept the defaults.
    3. Fill in the function by copying and pasting from `fn.py` into
